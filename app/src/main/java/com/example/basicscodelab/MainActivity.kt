@@ -23,7 +23,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             BasicsCodelabTheme {
                 MyApp(modifier = Modifier.fillMaxSize())
-                }
             }
         }
     }
