@@ -67,7 +67,7 @@ fun Onboarding(continueClicked: () -> Unit, modifier: Modifier = Modifier) {
 
 
     Column (modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-        Text(text = "Welcome to OS Showcase")
+        Text(text = "Welcome to number showcase")
         Button(onClick = continueClicked) {
             Text("Get Started")
         }
