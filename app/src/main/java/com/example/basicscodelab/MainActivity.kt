@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -16,8 +19,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
@@ -37,6 +42,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
     val names: Map<String, String> = mapOf(
@@ -46,15 +52,37 @@ fun MyApp(modifier: Modifier = Modifier) {
         "Bindows" to "Spyware you pay for. Optionally can be used as an operating system"
     )
 
-    Column (modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
+
+    var shouldShowOnboarding by remember {mutableStateOf(true)}
+
+    Surface {
+        if (shouldShowOnboarding) {
+            Onboarding(continueClicked = { shouldShowOnboarding = false} )
+    }
+        else {
             OsList(names)
+        }
+
+    }
+}
+
+
+@Composable
+fun Onboarding(continueClicked: () -> Unit, modifier: Modifier = Modifier) {
+
+
+        Column (modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+            Text(text = "Welcome to OS Showcase")
+            Button(onClick = continueClicked) {
+                Text("Get Started")
+            }
     }
 }
 
 
 @Composable
 fun OsList(names: Map<String, String>, modifier: Modifier = Modifier) {
-        Column() {
+    Column (modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
             for (oses in names.keys) {
                 EachShowcase(item = oses, desc = names[oses].toString())
             }
@@ -73,16 +101,24 @@ fun EachShowcase(item: String, desc: String, modifier: Modifier = Modifier) {
         .padding(vertical = 4.dp)) {
     Row(modifier = Modifier.padding(16.dp)) {
         if (!expanded.value) {
-            Column(modifier.weight(1f).align(Alignment.CenterVertically).padding(horizontal = 4.dp)) {
+            Column(
+                modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = 4.dp)) {
                 Text("$item ...")
             }
             ElevatedButton(onClick = {expanded.value = true}) {
                 Text(text = "View More")
-                
+
             }
         }
         else {
-            Column(modifier.weight(1f).align(Alignment.CenterVertically).padding(horizontal = 4.dp)) {
+            Column(
+                modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = 4.dp)) {
                 Text(desc)
             }
             ElevatedButton(onClick = {expanded.value = false}, modifier.align(Alignment.CenterVertically)) {
