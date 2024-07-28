@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ElevatedButton
@@ -45,13 +47,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
-    val names: Map<String, String> = mapOf(
-        "Android" to "Android is a great mobile operating system",
-        "iOS" to "iOS is an operating system made by Apple for the use in Apple mobile devices",
-        "Lunix" to " I'd just like to interject for a moment. What you're refering to as Linux, is in fact, GNU/Linux, or as I've recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX.",
-        "Bindows" to "Spyware you pay for. Optionally can be used as an operating system"
-    )
-
 
     var shouldShowOnboarding by remember {mutableStateOf(true)}
 
@@ -60,7 +55,7 @@ fun MyApp(modifier: Modifier = Modifier) {
             Onboarding(continueClicked = { shouldShowOnboarding = false} )
     }
         else {
-            OsList(names)
+            OsList()
         }
 
     }
@@ -71,21 +66,27 @@ fun MyApp(modifier: Modifier = Modifier) {
 fun Onboarding(continueClicked: () -> Unit, modifier: Modifier = Modifier) {
 
 
-        Column (modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-            Text(text = "Welcome to OS Showcase")
-            Button(onClick = continueClicked) {
-                Text("Get Started")
-            }
+    Column (modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+        Text(text = "Welcome to OS Showcase")
+        Button(onClick = continueClicked) {
+            Text("Get Started")
+        }
     }
 }
 
 
 @Composable
-fun OsList(names: Map<String, String>, modifier: Modifier = Modifier) {
-    Column (modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)){
-            for (oses in names.keys) {
-                EachShowcase(item = oses, desc = names[oses].toString())
-            }
+fun OsList(modifier: Modifier = Modifier) {
+    val names: MutableMap<String, String> = mutableMapOf()
+    for (num in 1..2000) {
+        names["Number: $num"] = "The number is $num"
+
+    }
+
+    LazyColumn(modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
+        items(names.keys.toList()) { name ->
+                EachShowcase(item = name, desc = names[name].toString())
+        }
     }
 }
 
@@ -134,5 +135,13 @@ fun EachShowcase(item: String, desc: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     BasicsCodelabTheme {
         MyApp()
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320)
+@Composable
+fun OsListPreview() {
+    BasicsCodelabTheme {
+        OsList()
     }
 }
