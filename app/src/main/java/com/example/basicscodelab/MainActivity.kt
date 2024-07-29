@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -94,6 +95,10 @@ fun EachShowcase(item: String, desc: String, modifier: Modifier = Modifier) {
         mutableStateOf(false)
     }
 
+    val extraPadding by animateDpAsState(
+        if (expanded.value) 40.dp else 4.dp
+    )
+
     Surface(color = MaterialTheme.colorScheme.primary, modifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 4.dp)) {
@@ -103,10 +108,14 @@ fun EachShowcase(item: String, desc: String, modifier: Modifier = Modifier) {
                 modifier
                     .weight(1f)
                     .align(Alignment.CenterVertically)
-                    .padding(horizontal = 4.dp)) {
+                    .padding(horizontal = 4.dp, vertical = extraPadding)
+            ) {
                 Text("$item ...")
             }
-            ElevatedButton(onClick = {expanded.value = true}) {
+            ElevatedButton(
+                onClick = { expanded.value = true },
+                modifier.align(Alignment.CenterVertically)
+            ) {
                 Text(text = "View More")
 
             }
@@ -116,10 +125,16 @@ fun EachShowcase(item: String, desc: String, modifier: Modifier = Modifier) {
                 modifier
                     .weight(1f)
                     .align(Alignment.CenterVertically)
-                    .padding(horizontal = 4.dp)) {
+                    .padding(horizontal = 4.dp, vertical = extraPadding)
+            ) {
                 Text(desc)
             }
-            ElevatedButton(onClick = {expanded.value = false}, modifier.align(Alignment.CenterVertically)) {
+            ElevatedButton(
+                onClick = { expanded.value = false },
+                modifier
+                    .align(Alignment.CenterVertically)
+//                    .padding(vertical = extraPadding)
+            ) {
                 Text(text = "View Less")
                 }
             }
@@ -127,13 +142,6 @@ fun EachShowcase(item: String, desc: String, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun GreetingPreview() {
-    BasicsCodelabTheme {
-        MyApp()
-    }
-}
 
 @Preview(showBackground = true, widthDp = 320)
 @Composable
@@ -142,3 +150,11 @@ fun OsListPreview() {
         OsList()
     }
 }
+
+//@Preview(showBackground = true, widthDp = 320)
+//@Composable
+//fun GreetingPreview() {
+//    BasicsCodelabTheme {
+//        MyApp()
+//    }
+//}
